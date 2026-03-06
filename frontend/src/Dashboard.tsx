@@ -1,28 +1,34 @@
-import { useEffect, useState } from "react"
+import React from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-interface Analytics {
-  total_items: number
-  items_last_24h: number
-}
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export default function Dashboard() {
-  const [data, setData] = useState<Analytics | null>(null)
-
-  useEffect(() => {
-    fetch("/analytics/items")
-      .then(res => res.json())
-      .then(setData)
-  }, [])
-
-  if (!data) {
-    return <p>Loading analytics...</p>
-  }
+const Dashboard: React.FC = () => {
+  const data = {
+    labels: ["Jan", "Feb", "Mar"],
+    datasets: [
+      {
+        label: "Items created",
+        data: [5, 10, 7],
+      },
+    ],
+  };
 
   return (
     <div>
-      <h2>Analytics</h2>
-      <p>Total items: {data.total_items}</p>
-      <p>Items in last 24h: {data.items_last_24h}</p>
+      <h2>Analytics Dashboard</h2>
+      <Bar data={data} />
     </div>
-  )
-}
+  );
+};
+
+export default Dashboard;
